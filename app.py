@@ -11,6 +11,8 @@ from reportlab.lib.pagesizes import A4
 import io
 from werkzeug.utils import secure_filename
 from flask import request
+from dotenv import load_dotenv
+import os
 from math import radians, cos, sin, asin, sqrt
 from flask_mail import Mail, Message
 from reportlab.lib.styles import ParagraphStyle
@@ -39,6 +41,7 @@ import io
 
 
 app = Flask(__name__)
+load_dotenv()
 app.secret_key = "your_secret_key"
 
 UPLOAD_FOLDER = "static/uploads"
@@ -56,8 +59,9 @@ DB_PATH = os.path.join(BASE_DIR, "database.db")
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 587
 app.config["MAIL_USE_TLS"] = True
-app.config["MAIL_USERNAME"] = "vinaynouse313@gmail.com"
-app.config["MAIL_PASSWORD"] = "coss cizz pzfb jbpc"
+app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")
+app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
+
 
 mail = Mail(app)
 
@@ -1618,14 +1622,7 @@ def download_pdf(booking_id):
     )
 
 
-@app.route("/test-email")
-def test_email():
-    send_email(
-        "vinnayyadav0@gmail.com",   # yaha apna gmail daal
-        "Test Email",
-        "If you are reading this, email system is working!"
-    )
-    return "Email Sent Successfully"
+
 
 
 # ---------------- RUN ----------------
