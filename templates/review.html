@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Write Review</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#f4f6f9;
+margin:0;
+padding:0;
+}
+
+.container{
+width:500px;
+margin:auto;
+background:white;
+padding:35px;
+margin-top:70px;
+border-radius:10px;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+
+h2{
+text-align:center;
+margin-bottom:10px;
+}
+
+.provider{
+text-align:center;
+color:#666;
+margin-bottom:25px;
+}
+
+.star-rating{
+display:flex;
+flex-direction:row-reverse;
+justify-content:center;
+margin-bottom:25px;
+}
+
+.star-rating input{
+display:none;
+}
+
+.star-rating label{
+font-size:35px;
+color:#ccc;
+cursor:pointer;
+transition:0.2s;
+}
+
+.star-rating input:checked ~ label{
+color:gold;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label{
+color:gold;
+}
+
+textarea{
+width:100%;
+height:120px;
+padding:12px;
+border-radius:6px;
+border:1px solid #ddd;
+margin-bottom:15px;
+font-size:14px;
+resize:none;
+}
+
+input[type=file]{
+margin-bottom:20px;
+}
+
+button{
+width:100%;
+padding:13px;
+background:#2c7be5;
+border:none;
+color:white;
+font-size:16px;
+border-radius:6px;
+cursor:pointer;
+transition:0.2s;
+}
+
+button:hover{
+background:#1a5fd0;
+}
+
+.back{
+text-align:center;
+margin-top:15px;
+}
+
+.back a{
+text-decoration:none;
+color:#666;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Write a Review</h2>
+
+<div class="provider">
+Review for <b>{{ booking.name }}</b>
+</div>
+
+<form action="/add-review/{{ booking.id }}" method="POST" enctype="multipart/form-data">
+
+<input type="hidden" name="booking_id" value="{{ booking.id }}">
+<input type="hidden" name="provider_id" value="{{ booking.provider_id }}">
+
+<div class="star-rating">
+
+<input type="radio" name="rating" value="5" id="star5" required>
+<label for="star5">★</label>
+
+<input type="radio" name="rating" value="4" id="star4">
+<label for="star4">★</label>
+
+<input type="radio" name="rating" value="3" id="star3">
+<label for="star3">★</label>
+
+<input type="radio" name="rating" value="2" id="star2">
+<label for="star2">★</label>
+
+<input type="radio" name="rating" value="1" id="star1">
+<label for="star1">★</label>
+
+</div>
+
+<textarea name="comment" placeholder="Write your experience..." required></textarea>
+
+<input type="file" name="image">
+
+<button type="submit">Submit Review</button>
+
+</form>
+
+<div class="back">
+<a href="/customer-dashboard">⬅ Back to Dashboard</a>
+</div>
+
+</div>
+
+</body>
+</html>

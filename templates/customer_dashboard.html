@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Dashboard</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+
+        body{
+            margin:0;
+            font-family:'Poppins',sans-serif;
+            background:#f4f6f9;
+        }
+
+        .navbar{
+            background:#111827;
+            color:white;
+            padding:15px 40px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        .navbar a{
+            color:white;
+            text-decoration:none;
+            background:#ef4444;
+            padding:6px 12px;
+            border-radius:6px;
+            font-size:14px;
+        }
+
+        .container{
+            width:90%;
+            margin:40px auto;
+        }
+
+        h2{
+            margin-bottom:20px;
+        }
+
+        .card{
+            background:white;
+            padding:20px;
+            border-radius:12px;
+            box-shadow:0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        th{
+            background:#2563eb;
+            color:white;
+            padding:12px;
+            text-align:left;
+        }
+
+        td{
+            padding:12px;
+            border-bottom:1px solid #eee;
+        }
+
+        tr:hover{
+            background:#f9fafb;
+        }
+
+        .btn{
+            padding:6px 12px;
+            border-radius:6px;
+            border:none;
+            cursor:pointer;
+            font-size:13px;
+        }
+
+        .review-btn{
+            background:#10b981;
+            color:white;
+        }
+
+        .report-btn{
+            background:#ef4444;
+            color:white;
+        }
+
+        .status-done{
+            color:#16a34a;
+            font-weight:500;
+        }
+
+        .status-pending{
+            color:#f59e0b;
+            font-weight:500;
+        }
+
+        .empty{
+            text-align:center;
+            padding:20px;
+            color:gray;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <h3>Customer Dashboard</h3>
+    <a href="/customer-logout">Logout</a>
+</div>
+
+<div class="container">
+
+<h2>Welcome, {{ customer_name }}</h2>
+
+<div class="card">
+
+{% if bookings %}
+
+<table>
+
+<tr>
+<th>Provider</th>
+<th>Service</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+{% for b in bookings %}
+
+<tr>
+
+<td>{{ b[1] }}</td>
+<td>{{ b[2] }}</td>
+
+<td>
+
+{% if b[3] == "completed" %}
+<span class="status-done">Completed</span>
+{% else %}
+<span class="status-pending">{{ b[3] }}</span>
+{% endif %}
+
+</td>
+
+<td>
+
+{% if b[3] == "completed" and not b[4] %}
+
+<a href="/review/{{ b[0] }}">
+<button class="btn review-btn">Leave Review</button>
+</a>
+
+{% elif b[4] %}
+
+<span class="status-done">Review Submitted</span>
+
+{% else %}
+—
+{% endif %}
+
+<br><br>
+
+<a href="/report/{{ b[0] }}">
+<button class="btn report-btn">Report</button>
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% else %}
+
+<div class="empty">
+No bookings yet.
+</div>
+
+{% endif %}
+
+</div>
+
+</div>
+
+</body>
+</html>

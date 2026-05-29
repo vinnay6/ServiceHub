@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Provider</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="form-box">
+    <h2>Add Your Service</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+
+        <input type="text" name="name" placeholder="Name" required>
+
+        <input type="text" name="service" placeholder="Service" required>
+
+        <input type="text" name="city" placeholder="City" required>
+
+        <input type="email" name="email" placeholder="Email" required>
+
+        <input type="password" name="password" placeholder="Password" required>
+
+        <input type="text" name="phone" placeholder="WhatsApp Number" required>
+
+        <input type="text" name="price" placeholder="Service Price" required>
+
+        
+
+        <label>About Your Business</label>
+        <textarea name="about" rows="5" placeholder="Describe your services..."></textarea>
+
+        <!-- 🔥 Logo Upload -->
+
+        
+        <label>Upload Business Logo</label>
+        <input type="file" name="logo" accept="image/*" required>
+
+
+
+
+        <!-- 🔥 Gallery Images -->
+        <label>Upload Business Images</label>
+        <input type="file" name="images" multiple accept="image/*">
+
+        <button type="submit">Create Provider</button>
+
+    </form>
+
+    <a href="/">Back to Home</a>
+
+</div>
+
+</body>
+</html>
+        

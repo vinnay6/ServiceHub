@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Bookings</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#f4f6f9;
+}
+
+.sidebar{
+width:230px;
+height:100vh;
+background:#2c3e50;
+position:fixed;
+padding-top:30px;
+}
+
+.sidebar h2{
+color:white;
+text-align:center;
+margin-bottom:40px;
+}
+
+.sidebar a{
+display:block;
+color:white;
+padding:14px 20px;
+text-decoration:none;
+}
+
+.sidebar a:hover{
+background:#34495e;
+}
+
+.main{
+margin-left:230px;
+padding:30px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+background:white;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #ddd;
+text-align:center;
+}
+
+th{
+background:#34495e;
+color:white;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>Admin Panel</h2>
+
+<a href="/admin-dashboard">Dashboard</a>
+<a href="/admin-providers">Providers</a>
+<a href="/admin-customers">Customers</a>
+<a href="/admin-bookings">Bookings</a>
+<a href="/admin-revenue">Revenue</a>
+
+</div>
+
+<div class="main">
+
+<h2>All Bookings</h2>
+
+<table>
+
+<tr>
+<th>ID</th>
+<th>Provider</th>
+<th>Customer</th>
+<th>Date</th>
+<th>Status</th>
+<th>Total</th>
+</tr>
+
+{% for b in bookings %}
+
+<tr>
+<td>{{b.id}}</td>
+<td>{{b.provider_name}}</td>
+<td>{{b.customer_name}}</td>
+<td>{{b.date}}</td>
+<td>{{b.status}}</td>
+<td>₹{{b.total_amount}}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+</body>
+</html>

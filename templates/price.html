@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>ServiceHub Invoice</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family: Arial, sans-serif;
+            background:#f3f4f6;
+            padding:40px;
+        }
+
+        .invoice{
+
+            max-width:700px;
+            margin:auto;
+
+            background:white;
+
+            border-radius:18px;
+
+            overflow:hidden;
+
+            box-shadow:0 10px 30px rgba(0,0,0,0.08);
+
+        }
+
+        .top{
+
+            background:linear-gradient(135deg,#2563eb,#16a34a);
+
+            color:white;
+
+            padding:35px;
+
+        }
+
+        .company{
+            font-size:32px;
+            font-weight:bold;
+        }
+
+        .tagline{
+            margin-top:5px;
+            opacity:0.9;
+        }
+
+        .paid{
+
+            margin-top:20px;
+
+            display:inline-block;
+
+            background:white;
+
+            color:#16a34a;
+
+            padding:10px 18px;
+
+            border-radius:30px;
+
+            font-weight:bold;
+        }
+
+        .content{
+            padding:35px;
+        }
+
+        .section{
+            margin-bottom:30px;
+        }
+
+        .heading{
+
+            font-size:18px;
+
+            font-weight:bold;
+
+            margin-bottom:15px;
+
+            color:#111827;
+        }
+
+        .row{
+
+            display:flex;
+
+            justify-content:space-between;
+
+            margin:12px 0;
+
+            color:#374151;
+        }
+
+        .total{
+
+            font-size:28px;
+
+            font-weight:bold;
+
+            color:#16a34a;
+        }
+
+        hr{
+            border:none;
+            border-top:1px solid #e5e7eb;
+            margin:20px 0;
+        }
+
+        .footer{
+
+            background:#f9fafb;
+
+            padding:25px;
+
+            text-align:center;
+
+            color:#6b7280;
+
+            font-size:14px;
+        }
+
+        .download{
+
+            display:block;
+
+            width:100%;
+
+            text-align:center;
+
+            background:#2563eb;
+
+            color:white;
+
+            padding:16px;
+
+            border-radius:12px;
+
+            text-decoration:none;
+
+            font-weight:bold;
+
+            margin-top:25px;
+        }
+
+        .download:hover{
+            background:#1d4ed8;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="invoice">
+
+    <!-- TOP -->
+
+    <div class="top">
+
+        <div class="company">
+            ServiceHub
+        </div>
+
+        <div class="tagline">
+            Smart Home Service Booking Platform
+        </div>
+
+        <div class="paid">
+            ✔ Payment Successful
+        </div>
+
+    </div>
+
+    <!-- CONTENT -->
+
+    <div class="content">
+
+        <!-- CUSTOMER INFO -->
+
+        <div class="section">
+
+            <div class="heading">
+                Booking Information
+            </div>
+
+            <div class="row">
+                <span>Invoice ID</span>
+                <strong>#{{ data["id"] }}</strong>
+            </div>
+
+            <div class="row">
+                <span>Booking Date</span>
+                <strong>{{ data["date"] }}</strong>
+            </div>
+
+            <div class="row">
+                <span>Status</span>
+                <strong>{{ data["status"] }}</strong>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <!-- BILLING -->
+
+        <div class="section">
+
+            <div class="heading">
+                Billing Summary
+            </div>
+
+            <div class="row">
+                <span>Service Amount</span>
+                <span>
+                    ₹{{ "%.2f"|format(data["total_amount"]) }}
+                </span>
+            </div>
+
+            <div class="row">
+                <span>Platform Charges</span>
+                <span>
+                    ₹{{ "%.2f"|format(data["handling_charge"]) }}
+                </span>
+            </div>
+
+            <div class="row">
+                <span>GST Included</span>
+                <span>18%</span>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <!-- TOTAL -->
+
+        <div class="section">
+
+            <div class="row total">
+
+                <span>Total Paid</span>
+
+                <span>
+                    ₹{{ "%.2f"|format(data["final_amount"]) }}
+                </span>
+
+            </div>
+
+        </div>
+
+        <!-- DOWNLOAD -->
+
+        <a
+            href="/download-pdf/{{ data['id'] }}"
+            class="download"
+        >
+            Download Professional Invoice PDF
+        </a>
+
+    </div>
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+        Thank you for choosing <strong>ServiceHub</strong> ❤️
+
+        <br><br>
+
+        This is a computer generated invoice.
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Provider Dashboard</title>
+
+    <style>
+        body{
+            font-family: Arial;
+            background:#f5f7fb;
+            padding:30px;
+        }
+
+        .container{
+            max-width:1100px;
+            margin:auto;
+        }
+
+        .card{
+            background:white;
+            padding:20px;
+            border-radius:12px;
+            box-shadow:0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom:20px;
+        }
+
+        h1{
+            text-align:center;
+            margin-bottom:30px;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        th, td{
+            padding:12px;
+            text-align:left;
+        }
+
+        th{
+            background:#f1f1f1;
+        }
+
+        tr{
+            border-bottom:1px solid #eee;
+        }
+
+        .btn{
+            padding:6px 12px;
+            border-radius:6px;
+            text-decoration:none;
+            font-size:13px;
+            margin-right:5px;
+            color:white;
+        }
+
+        .confirm{ background:#2ecc71; }
+        .complete{ background:#3498db; }
+        .delete{ background:#e74c3c; }
+
+        .stats{
+            display:flex;
+            justify-content:space-between;
+            flex-wrap:wrap;
+        }
+
+        .stat-box{
+            flex:1;
+            min-width:200px;
+            background:#f8f9fc;
+            padding:15px;
+            margin:10px;
+            border-radius:10px;
+            text-align:center;
+        }
+
+        .stat-box h3{
+            margin:5px 0;
+        }
+
+        .logout{
+            text-align:right;
+            margin-top:10px;
+        }
+
+        .logout button{
+            padding:8px 15px;
+            border:none;
+            border-radius:6px;
+            background:#444;
+            color:white;
+            cursor:pointer;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Provider Dashboard</h1>
+
+    <!-- Provider Info -->
+    <div class="card">
+        <h2>{{ provider[1] }}</h2>
+        <p>{{ provider[2] }} • {{ provider[3] }}</p>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="card">
+        <div class="stats">
+            <div class="stat-box">
+                <h4>Total Bookings</h4>
+                <h3>{{ total_bookings }}</h3>
+            </div>
+
+            <div class="stat-box">
+                <h4>Total Revenue</h4>
+                <h3>₹ {{ total_revenue }}</h3>
+            </div>
+
+            <div class="stat-box">
+                <h4>Your Earnings</h4>
+                <h3>₹ {{ provider_earnings }}</h3>
+            </div>
+
+            <div class="stat-box">
+                <h4>Platform Commission</h4>
+                <h3>₹ {{ total_commission }}</h3>
+            </div>
+        </div>
+    </div>
+    
+
+<h3>Notifications</h3>
+{% for n in notifications %}
+<p>{{ n[3] }}</p>
+{% endfor %}
+
+<!-- phir neeche bookings table -->
+
+
+    <!-- Bookings Table -->
+    <div class="card">
+
+        <h2>Bookings</h2>
+
+        
+
+        <table>
+
+            <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Phone</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+
+            {% for b in bookings %}
+            <tr>
+                <td>{{ b[0] }}</td>
+                <td>{{ b[2] }}</td>
+                <td>{{ b[3] }}</td>
+                <td>{{ b[4] }}</td>
+                <td>₹ {{ b[6] or 0 }}</td>
+                <td>{{ b[5] }}</td>
+
+                <td>
+                    <a class="btn confirm" href="/confirm-booking/{{ b[0] }}">Confirm</a>
+                    <a class="btn complete" href="/complete-booking/{{ b[0] }}">Complete</a>
+                    <a class="btn delete" href="/delete-booking/{{ b[0] }}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+
+        </table>
+
+        <div class="logout">
+            <a href="/logout">
+                <button>Logout</button>
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Little Something For You</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fad0c4);
+        text-align: center;
+        overflow-x: hidden;
+        color: #4a044e;
+    }
+
+    .container {
+        padding: 80px 20px 40px;
+        max-width: 1000px;
+        margin: auto;
+    }
+
+    h1 {
+        font-size: 42px;
+        margin-bottom: 15px;
+        animation: fadeIn 2s ease-in-out;
+    }
+
+    .quote {
+        font-size: 20px;
+        font-style: italic;
+        margin-bottom: 40px;
+        animation: fadeIn 3s ease-in-out;
+    }
+
+    /* Slider */
+    .slider {
+        position: relative;
+        width: 90%;
+        max-width: 900px;
+        margin: auto;
+        overflow: hidden;
+        border-radius: 20px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    }
+
+    .slides {
+        display: flex;
+        width: 600%;
+        animation: slide 24s infinite;
+    }
+
+    .slides img {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+    }
+
+    @keyframes slide {
+        0% { transform: translateX(0); }
+        16% { transform: translateX(0); }
+
+        20% { transform: translateX(-100%); }
+        36% { transform: translateX(-100%); }
+
+        40% { transform: translateX(-200%); }
+        56% { transform: translateX(-200%); }
+
+        60% { transform: translateX(-300%); }
+        76% { transform: translateX(-300%); }
+
+        80% { transform: translateX(-400%); }
+        96% { transform: translateX(-400%); }
+
+        100% { transform: translateX(-500%); }
+    }
+
+    .message {
+        margin-top: 40px;
+        font-size: 18px;
+        line-height: 1.6;
+    }
+
+    .signature {
+        margin-top: 30px;
+        font-style: italic;
+        font-size: 16px;
+    }
+
+    footer {
+        margin-top: 60px;
+        padding: 20px;
+        font-size: 14px;
+        opacity: 0.7;
+    }
+
+    /* Floating Hearts */
+    .heart {
+        position: fixed;
+        bottom: -10px;
+        font-size: 20px;
+        animation: floatUp 6s linear infinite;
+        opacity: 0.6;
+    }
+
+    @keyframes floatUp {
+        0% { transform: translateY(0); opacity: 0.6; }
+        100% { transform: translateY(-110vh); opacity: 0; }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>For Someone Who Makes Learning Beautiful 💕</h1>
+
+    <div class="quote">
+        “Some people explain concepts…  
+        and some people make them feel magical.”
+    </div>
+
+    <div class="slider">
+        <div class="slides">
+            <img src="pic1.jpg">
+            <img src="pic2.jpg">
+            <img src="pic3.jpg">
+            <img src="pic4.jpg">
+            <img src="pic5.jpg">
+            <img src="pic6.jpg">
+        </div>
+    </div>
+
+    <div class="message">
+        I hope this doesn’t sound strange,  
+        but you have such a beautiful presence.  
+        The way you speak and smile while explaining things  
+        creates such a positive and calming energy.
+        <br><br>
+        Sometimes I may rewatch concepts to understand them better,  
+        but I always stay till the end —  
+        because your way of teaching makes every minute worth it.
+    </div>
+
+    <div class="signature">
+        — Just one of your Instagram followers 💗
+    </div>
+
+</div>
+
+<footer>
+    Made with Love & admiration
+</footer>
+
+<script>
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "💖";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = Math.random() * 15 + 15 + "px";
+    heart.style.animationDuration = Math.random() * 3 + 4 + "s";
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+        heart.remove();
+    }, 6000);
+}
+
+setInterval(createHeart, 500);
+</script>
+
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Provider Dashboard</title>
+
+    <style>
+        body{
+            font-family: Arial;
+            background:#f5f7fb;
+            padding:30px;
+        }
+
+        .container{
+            max-width:1100px;
+            margin:auto;
+        }
+
+        .card{
+            background:white;
+            padding:20px;
+            border-radius:12px;
+            box-shadow:0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom:20px;
+        }
+
+        h1{
+            text-align:center;
+            margin-bottom:30px;
+        }
+
+        /* TOP SECTION (Provider + Notification side by side) */
+        .top-section{
+            display:flex;
+            justify-content:space-between;
+            gap:20px;
+        }
+
+        .provider-info{
+            flex:1;
+        }
+
+        .notification-box{
+            width:300px;
+            background:#f8f9fc;
+            padding:15px;
+            border-radius:10px;
+            max-height:200px;
+            overflow-y:auto;
+        }
+
+        .notification-item{
+            background:white;
+            padding:8px;
+            margin-bottom:8px;
+            border-radius:6px;
+            font-size:14px;
+            box-shadow:0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        th, td{
+            padding:12px;
+            text-align:left;
+        }
+
+        th{
+            background:#f1f1f1;
+        }
+
+        tr{
+            border-bottom:1px solid #eee;
+        }
+
+        .btn{
+            padding:6px 12px;
+            border-radius:6px;
+            text-decoration:none;
+            font-size:13px;
+            margin-right:5px;
+            color:white;
+        }
+
+        .confirm{ background:#2ecc71; }
+        .complete{ background:#3498db; }
+        .delete{ background:#e74c3c; }
+
+        .stats{
+            display:flex;
+            justify-content:space-between;
+            flex-wrap:wrap;
+        }
+
+        .stat-box{
+            flex:1;
+            min-width:200px;
+            background:#f8f9fc;
+            padding:15px;
+            margin:10px;
+            border-radius:10px;
+            text-align:center;
+        }
+
+        .stat-box h3{
+            margin:5px 0;
+        }
+
+        .logout{
+            text-align:right;
+            margin-top:10px;
+        }
+
+        .logout button{
+            padding:8px 15px;
+            border:none;
+            border-radius:6px;
+            background:#444;
+            color:white;
+            cursor:pointer;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Provider Dashboard</h1>
+
+    <!-- Provider Info + Notification -->
+    <div class="card top-section">
+
+        <!-- LEFT -->
+        <div class="provider-info">
+            <h2>{{ provider[1] }}</h2>
+            <p>{{ provider[2] }} • {{ provider[3] }}</p>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="notification-box">
+            <h4>🔔 Notifications</h4>
+
+            {% for n in notifications %}
+                <div class="notification-item">
+                    {{ n[3] }}
+                </div>
+            {% else %}
+                <p>No notifications yet</p>
+            {% endfor %}
+        </div>
+
+    </div>
+
+    <!-- Stats Section -->
+    <div class="card">
+        <div class="stats">
+            <div class="stat-box">
+                <h4>Total Bookings</h4>
+                <h3>{{ total_bookings }}</h3>
+            </div>
+
+            <div class="stat-box">
+                <h4>Total Revenue</h4>
+                <h3>₹ {{ total_revenue }}</h3>
+            </div>
+
+            <div class="stat-box">
+                <h4>Your Earnings</h4>
+                <h3>₹ {{ provider_earnings }}</h3>
+            </div>
+
+            <div class="stat-box">
+                <h4>Platform Commission</h4>
+                <h3>₹ {{ total_commission }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bookings Table -->
+    <div class="card">
+
+        <h2>Bookings</h2>
+
+        <table>
+
+            <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Phone</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+
+            {% for b in bookings %}
+            <tr>
+                <td>{{ b[0] }}</td>
+                <td>{{ b[2] }}</td>
+                <td>{{ b[3] }}</td>
+                <td>{{ b[4] }}</td>
+                <td>₹ {{ b[6] or 0 }}</td>
+                <td>{{ b[5] }}</td>
+
+                <td>
+                    <a class="btn confirm" href="/confirm-booking/{{ b[0] }}">Confirm</a>
+                    <a class="btn complete" href="/complete-booking/{{ b[0] }}">Complete</a>
+                    <a class="btn delete" href="/delete-booking/{{ b[0] }}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+
+        </table>
+
+        <div class="logout">
+            <a href="/logout">
+                <button>Logout</button>
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

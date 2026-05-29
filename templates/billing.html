@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Service Checkout</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f4f6;
+            padding-bottom: 120px;
+        }
+
+        .container {
+            max-width: 520px;
+            margin: 30px auto;
+            padding: 15px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #111827;
+        }
+
+        .provider {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2563eb;
+            margin-bottom: 8px;
+        }
+
+        .service-name {
+            color: #4b5563;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .bill-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 12px 0;
+            font-size: 16px;
+        }
+
+        .grand {
+            font-weight: bold;
+            font-size: 22px;
+            margin-top: 15px;
+        }
+
+        .discount {
+            color: green;
+            font-weight: bold;
+        }
+
+        input {
+            width: 72%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #d1d5db;
+            outline: none;
+            font-size: 15px;
+        }
+
+        input:focus{
+            border:1px solid #2563eb;
+        }
+
+        .apply-btn {
+            background: #2563eb;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .apply-btn:hover{
+            background:#1e40af;
+        }
+
+        .sticky-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 15px 20px;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.08);
+        }
+
+        .pay-btn {
+            width: 100%;
+            background: #16a34a;
+            color: white;
+            padding: 16px;
+            border: none;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .pay-btn:hover{
+            background:#15803d;
+        }
+
+        .small-text{
+            margin-top:10px;
+            font-size:14px;
+            color:gray;
+        }
+
+        hr{
+            margin-top:15px;
+            border:none;
+            border-top:1px solid #e5e7eb;
+        }
+
+        .tag{
+            display:inline-block;
+            background:#dcfce7;
+            color:#166534;
+            padding:6px 12px;
+            border-radius:20px;
+            font-size:13px;
+            margin-top:10px;
+            font-weight:bold;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- SERVICE SUMMARY -->
+
+    <div class="card">
+
+        <div class="title">
+            Service Booking Summary
+        </div>
+
+        <div class="provider">
+            {{ booking["provider_name"] }}
+        </div>
+
+        <div class="service-name">
+            {{ booking["service_name"] }}
+        </div>
+
+        <p>
+            Booking ID:
+            <strong>#{{ booking["id"] }}</strong>
+        </p>
+
+        <br>
+
+        <p>
+            Booking Date:
+            <strong>{{ booking["date"] }}</strong>
+        </p>
+
+        <br>
+
+        <p>
+            Provider Contact:
+            <strong>{{ booking["provider_phone"] }}</strong>
+        </p>
+
+        <div class="tag">
+            ✔ Confirmed Booking
+        </div>
+
+        <br><br>
+
+        <p>
+            Service Price:
+            <strong>
+                ₹{{ "%.2f"|format(service_amount) }}
+            </strong>
+        </p>
+
+    </div>
+
+    <!-- COUPON -->
+
+    <div class="card">
+
+        <div class="title">
+            Apply Coupon
+        </div>
+
+        <form method="POST">
+
+            <input
+                type="text"
+                name="coupon"
+                placeholder="Enter coupon code"
+            >
+
+            <button
+                class="apply-btn"
+                type="submit"
+            >
+                Apply
+            </button>
+
+        </form>
+
+        <div class="small-text">
+            Use code <strong>SAVE35</strong> to get 35% OFF
+        </div>
+
+    </div>
+
+    <!-- BILL DETAILS -->
+
+    <div class="card">
+
+        <div class="title">
+            Bill Details
+        </div>
+
+        <div class="bill-row">
+            <span>Service Amount</span>
+            <span>
+                ₹{{ "%.2f"|format(service_amount) }}
+            </span>
+        </div>
+
+        <div class="bill-row">
+            <span>GST (18%)</span>
+            <span>
+                ₹{{ "%.2f"|format(tax) }}
+            </span>
+        </div>
+
+        <div class="bill-row">
+            <span>Handling Charges</span>
+            <span>
+                ₹{{ "%.2f"|format(handling) }}
+            </span>
+        </div>
+
+        {% if discount > 0 %}
+
+        <div class="bill-row discount">
+
+            <span>
+                Discount (35%)
+            </span>
+
+            <span>
+                - ₹{{ "%.2f"|format(discount) }}
+            </span>
+
+        </div>
+
+        {% endif %}
+
+        <hr>
+
+        <div class="bill-row grand">
+
+            <span>Total Payable</span>
+
+            <span>
+                ₹{{ "%.2f"|format(total) }}
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- STICKY PAY BUTTON -->
+
+<div class="sticky-footer">
+
+    <form action="/payment/{{ booking['id'] }}" method="POST">
+
+        <button class="pay-btn">
+
+            Pay ₹{{ "%.2f"|format(total) }}
+
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>

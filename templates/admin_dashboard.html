@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Panel</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+margin:0;
+font-family:Poppins;
+background:#f4f6f9;
+display:flex;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:220px;
+background:#111827;
+height:100vh;
+color:white;
+padding:20px;
+}
+
+.sidebar h2{
+margin-bottom:30px;
+}
+
+.sidebar a{
+display:block;
+color:white;
+text-decoration:none;
+padding:10px;
+margin-bottom:10px;
+border-radius:6px;
+}
+
+.sidebar a:hover{
+background:#2563eb;
+}
+
+/* MAIN */
+
+.main{
+flex:1;
+padding:40px;
+}
+
+/* CARDS */
+
+.cards{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:20px;
+margin-bottom:40px;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+
+.card h3{
+margin:0;
+color:#555;
+}
+
+.card h2{
+margin-top:10px;
+}
+
+/* TABLE */
+
+.section{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.08);
+margin-bottom:30px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th{
+background:#2563eb;
+color:white;
+padding:12px;
+}
+
+td{
+padding:12px;
+border-bottom:1px solid #eee;
+}
+
+.btn{
+padding:6px 12px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+.approve{
+background:#10b981;
+color:white;
+}
+
+.reject{
+background:#ef4444;
+color:white;
+}
+
+/* NOTIFICATIONS */
+
+.notifications{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+
+.notification{
+padding:10px;
+border-bottom:1px solid #eee;
+font-size:14px;
+}
+
+.notification small{
+color:gray;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<h2>Admin Panel</h2>
+
+<a href="/admin-dashboard">Dashboard</a>
+<a href="/admin-providers">Manage Providers</a>
+<a href="/admin-customers">Manage Customers</a>
+<a href="/admin-bookings">All Bookings</a>
+<a href="/admin-revenue">Revenue & Commission</a>
+<a href="/admin-approvals">Provider Approvals</a>
+<a href="/admin-logout">Logout</a>
+
+</div>
+
+
+<!-- MAIN -->
+
+<div class="main">
+
+<h1>Admin Dashboard</h1>
+
+<div class="cards">
+
+<div class="card">
+<h3>Total Providers</h3>
+<h2>{{ total_providers }}</h2>
+</div>
+
+<div class="card">
+<h3>Total Customers</h3>
+<h2>{{ total_customers }}</h2>
+</div>
+
+<div class="card">
+<h3>Total Bookings</h3>
+<h2>{{ total_bookings }}</h2>
+</div>
+
+<div class="card">
+<h3>Total Revenue</h3>
+<h2>₹{{ total_revenue }}</h2>
+</div>
+
+</div>
+
+
+<!-- 🔔 NOTIFICATIONS -->
+
+<div class="section" style="margin-top:30px;">
+
+<h2>Admin Notifications</h2>
+
+{% for n in notifications %}
+
+<div style="padding:12px;border-bottom:1px solid #eee;">
+<p style="margin:0;">{{ n.message }}</p>
+<small style="color:gray;">{{ n.created_at }}</small>
+</div>
+
+{% endfor %}
+
+</div>
+
+
+<br><br>
+
+
+<div class="section">
+
+<h2>Pending Provider Approvals</h2>
+
+<table>
+
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Email</th>
+<th>Service</th>
+<th>Action</th>
+</tr>
+
+{% for p in pending_providers %}
+
+<tr>
+
+<td>{{ p.id }}</td>
+<td>{{ p.name }}</td>
+<td>{{ p.email }}</td>
+<td>{{ p.service }}</td>
+
+<td>
+
+<a href="/approve-provider/{{ p.id }}">
+<button class="btn approve">Approve</button>
+</a>
+
+<a href="/reject-provider/{{ p.id }}">
+<button class="btn reject">Reject</button>
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+</div>
+
+</body>
+</html>

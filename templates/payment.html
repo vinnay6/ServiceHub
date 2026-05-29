@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Payment</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f5f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 350px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .price {
+            font-size: 24px;
+            margin-bottom: 25px;
+            color: #2d3436;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .online-btn {
+            background: #0f9d58;
+            color: white;
+        }
+
+        .cod-btn {
+            background: #636e72;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Complete Payment</h2>
+
+    <div class="price">
+        ₹ {{ amount // 100 }}
+    </div>
+
+    <!-- Online Payment -->
+    <button class="online-btn" id="rzp-button">
+        Pay Online
+    </button>
+
+    <!-- COD Option -->
+    <form method="POST">
+        <input type="hidden" name="payment_type" value="cod">
+        <button type="submit" class="cod-btn">
+            Cash on Delivery
+        </button>
+    </form>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+var options = {
+    "key": "{{ key_id }}",
+    "amount": "{{ amount }}",
+    "currency": "INR",
+    "name": "Service Booking",
+    "description": "Complete Payment",
+    "order_id": "{{ order_id }}",
+
+    "handler": function (response) {
+        // PAYMENT SUCCESS ke baad redirect
+        window.location.href = "/booking-success/{{ booking_id }}";
+    }
+};
+
+var rzp1 = new Razorpay(options);
+rzp1.open();
+</script>
+
+</body>
+</html>

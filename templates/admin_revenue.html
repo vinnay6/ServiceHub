@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Revenue</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#f4f6f9;
+}
+
+.sidebar{
+width:230px;
+height:100vh;
+background:#2c3e50;
+position:fixed;
+padding-top:30px;
+}
+
+.sidebar h2{
+color:white;
+text-align:center;
+margin-bottom:40px;
+}
+
+.sidebar a{
+display:block;
+color:white;
+padding:14px 20px;
+text-decoration:none;
+}
+
+.sidebar a:hover{
+background:#34495e;
+}
+
+.main{
+margin-left:230px;
+padding:30px;
+}
+
+.card{
+background:white;
+padding:40px;
+width:300px;
+border-radius:8px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+text-align:center;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>Admin Panel</h2>
+
+<a href="/admin-dashboard">Dashboard</a>
+<a href="/admin-providers">Providers</a>
+<a href="/admin-customers">Customers</a>
+<a href="/admin-bookings">Bookings</a>
+<a href="/admin-revenue">Revenue</a>
+
+</div>
+
+<div class="main">
+
+<h2>Revenue</h2>
+
+<div class="card">
+
+<h3>Total Revenue</h3>
+<h1>₹{{revenue}}</h1>
+
+<h3>Admin Commission</h3>
+<h2>₹{{commission}}</h2>
+
+</div>
+
+</div>
+
+</body>
+</html>

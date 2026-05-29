@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Provider Profile</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#f5f6fa;
+}
+
+/* HEADER */
+
+.header{
+height:280px;
+background-size:cover;
+background-position:center;
+display:flex;
+align-items:flex-end;
+padding:40px;
+color:white;
+}
+
+.overlay{
+background:rgba(0,0,0,0.5);
+padding:20px;
+border-radius:10px;
+}
+
+.overlay h1{
+font-size:32px;
+}
+
+.rating{
+color:#ffd700;
+font-size:18px;
+margin-top:5px;
+}
+
+/* MAIN LAYOUT */
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:30px;
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:25px;
+}
+
+/* CARD */
+
+.card{
+background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0 10px 20px rgba(0,0,0,0.08);
+margin-bottom:20px;
+}
+
+/* GALLERY */
+
+.gallery{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-top:10px;
+}
+
+.gallery img{
+width:100%;
+height:130px;
+object-fit:cover;
+border-radius:8px;
+}
+
+/* SERVICES */
+
+.services{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+margin-top:10px;
+}
+
+.service-card{
+background:#f1f2f6;
+padding:12px;
+border-radius:8px;
+}
+
+/* REVIEWS */
+
+.review-card{
+background:#fff;
+padding:15px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.08);
+margin-top:10px;
+}
+
+.review-header{
+display:flex;
+justify-content:space-between;
+margin-bottom:6px;
+}
+
+.review-card img{
+width:100%;
+height:150px;
+object-fit:cover;
+border-radius:8px;
+margin-top:8px;
+}
+
+/* SIDEBAR */
+
+.price{
+color:#27ae60;
+font-size:28px;
+font-weight:600;
+margin-bottom:10px;
+}
+
+.contact{
+margin:10px 0;
+font-size:16px;
+}
+
+/* BUTTON */
+
+.btn{
+display:block;
+width:100%;
+padding:12px;
+border:none;
+border-radius:8px;
+text-align:center;
+text-decoration:none;
+font-weight:600;
+margin-top:10px;
+}
+
+.btn-book{
+background:#2e6cf6;
+color:white;
+}
+
+.btn-dashboard{
+background:#111;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<!-- PROVIDER HEADER -->
+
+<div class="header" style="background-image:url('{{ url_for('static', filename='uploads/' + provider[8]) }}')">
+
+<div class="overlay">
+
+<h1>{{ provider[1] }}</h1>
+
+<p>{{ provider[2] }} • {{ provider[3] }}</p>
+
+<div class="rating">
+⭐ {{ avg_rating if avg_rating else "New" }} / 5 ({{ reviews|length }} reviews)
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="container">
+
+
+<!-- LEFT SIDE -->
+
+<div>
+
+<div class="card">
+
+<h2>About</h2>
+
+<p>{{ provider[4] }}</p>
+
+</div>
+
+
+
+<div class="card">
+
+<h2>Business Gallery</h2>
+
+<div class="gallery">
+
+{% for img in images %}
+
+<img src="{{ url_for('static', filename='uploads/' + img[2]) }}">
+
+{% endfor %}
+
+</div>
+
+</div>
+
+
+
+<div class="card">
+
+<h2>Services Offered</h2>
+
+<div class="services">
+
+<div class="service-card">
+Bike Repair
+</div>
+
+<div class="service-card">
+Bike Service
+</div>
+
+<div class="service-card">
+Oil Change
+</div>
+
+<div class="service-card">
+Battery Change
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="card">
+
+<h2>Customer Reviews</h2>
+
+{% for r in reviews %}
+
+<div class="review-card">
+
+<div class="review-header">
+
+<strong>{{ r[6] }}</strong>
+
+<span>⭐ {{ r[3] }}/5</span>
+
+</div>
+
+<p>{{ r[4] }}</p>
+
+{% if r[5] %}
+
+<img src="{{ url_for('static', filename='reviews/' + r[5]) }}">
+
+{% endif %}
+
+</div>
+
+{% endfor %}
+
+</div>
+
+
+</div>
+
+
+
+<!-- RIGHT SIDEBAR -->
+
+<div>
+
+<div class="card">
+
+<h3>Service Price</h3>
+
+<div class="price">
+₹ {{ provider[7] }}
+</div>
+
+<div class="contact">
+📞 {{ provider[6] }}
+</div>
+
+<a href="/book/{{ provider[0] }}" class="btn btn-book">
+Book Now
+</a>
+
+<a href="/customer-dashboard" class="btn btn-dashboard">
+Open Dashboard
+</a>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+</body>
+</html>
