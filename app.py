@@ -239,7 +239,22 @@ CREATE TABLE IF NOT EXISTS reviews (
     """)
  
     
+# Create default admin if not exists
 
+admin = conn.execute(
+    "SELECT * FROM admins WHERE email=?",
+    ("admin@gmail.com",)
+).fetchone()
+
+if not admin:
+
+    conn.execute("""
+    INSERT INTO admins (email, password)
+    VALUES (?, ?)
+    """, (
+        "admin@gmail.com",
+        "admin123"
+    ))
 
     conn.commit()
     conn.close()
