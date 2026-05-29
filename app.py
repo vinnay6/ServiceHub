@@ -241,6 +241,8 @@ CREATE TABLE IF NOT EXISTS reviews (
     
 # Create default admin if not exists
 
+    # Default admin create
+
 admin = conn.execute(
     "SELECT * FROM admins WHERE email=?",
     ("admin@gmail.com",)
@@ -255,7 +257,6 @@ if not admin:
         "admin@gmail.com",
         "admin123"
     ))
-
     conn.commit()
     conn.close()
 init_db()
