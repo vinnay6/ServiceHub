@@ -42,7 +42,7 @@ import io
 
 app = Flask(__name__)
 load_dotenv()
-app.secret_key = "your_secret_key"
+app.secret_key = os.getenv("SECRET_KEY")
 
 UPLOAD_FOLDER = "static/uploads"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
@@ -50,7 +50,7 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 # ✅ Make sure folder exists
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-app.secret_key = "supersecretkey123"
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "database.db")
@@ -320,8 +320,10 @@ def providers():
 
     return render_template("providers.html", providers=providers)
 # ---------------- RAZORPAY ----------------
-RAZORPAY_KEY_ID = "rzp_test_SLXr0AXiCOU1HG"
-RAZORPAY_KEY_SECRET = "QDNh9VYRuVYJOV8vmuWGXiiY"
+RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID")
+RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET")
+
+
 client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
 
 # ---------------- LOGIN DECORATOR ----------------
@@ -752,26 +754,36 @@ def billing_page(booking_id):
         provider_amount=provider_amount
     )
 # ---------------- BOOK ----------------
+# ---------------- BOOK ----------------
 @app.route("/book/<int:provider_id>", methods=["GET", "POST"])
 def book(provider_id):
 
+    # Customer login check
     if "customer_id" not in session:
         session["next_url"] = request.url
         return redirect("/customer-login")
 
     conn = get_db()
 
+    # Provider fetch
     provider = conn.execute(
         "SELECT * FROM providers WHERE id=?",
         (provider_id,)
     ).fetchone()
 
+    # Provider not found
+    if not provider:
+        conn.close()
+        return "Provider not found"
+
+    # Form submit
     if request.method == "POST":
 
+        # Booking date
         date = request.form["date"]
 
         # Provider price
-        provider_price = int(provider[7])
+        provider_price = int(provider["price"])
 
         # Platform Commission (10%)
         commission = provider_price * 0.10
@@ -779,14 +791,28 @@ def book(provider_id):
         # Handling charge (5%)
         handling_charge = provider_price * 0.05
 
-        # Provider ko milne wala amount
-        provider_amount = provider_price - commission - handling_charge
+        # Provider earning
+        provider_amount = (
+            provider_price
+            - commission
+            - handling_charge
+        )
 
         c = conn.cursor()
 
+        # Insert booking
         c.execute("""
         INSERT INTO bookings
-        (provider_id, customer_id, date, status, total_amount, commission, provider_amount, handling_charge)
+        (
+            provider_id,
+            customer_id,
+            date,
+            status,
+            total_amount,
+            commission,
+            provider_amount,
+            handling_charge
+        )
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             provider_id,
@@ -800,11 +826,13 @@ def book(provider_id):
         ))
 
         booking_id = c.lastrowid
+
         conn.commit()
 
         # Notification for provider
         conn.execute("""
-        INSERT INTO notifications (user_id, role, message)
+        INSERT INTO notifications
+        (user_id, role, message)
         VALUES (?, ?, ?)
         """, (
             provider_id,
@@ -814,9 +842,10 @@ def book(provider_id):
 
         conn.commit()
 
-        # Email
-        provider_email = provider[4]
+        # Provider Email
+        provider_email = provider["email"]
 
+        # Send Email
         send_email(
             provider_email,
             "New Booking Received",
@@ -825,10 +854,15 @@ def book(provider_id):
 
         conn.close()
 
+        # Go to billing page
         return redirect(f"/billing/{booking_id}")
 
     conn.close()
-    return render_template("book.html", provider=provider)
+
+    return render_template(
+        "book.html",
+        provider=provider
+    )
 
 
 # ---------------- PAYMENT ----------------
@@ -982,15 +1016,21 @@ def report_provider(provider_id):
 
     conn = get_db()
 
+    # Save report
     conn.execute(
         "INSERT INTO reports (provider_id, message) VALUES (?,?)",
         (provider_id, message)
     )
 
-    conn.execute(
-        "INSERT INTO notifications (type, message) VALUES (?,?)",
-        ("report", f"Provider {provider_id} has been reported")
-    )
+    # Admin notification
+    conn.execute("""
+    INSERT INTO notifications (user_id, role, message)
+    VALUES (?, ?, ?)
+    """, (
+        1,
+        "admin",
+        f"Provider {provider_id} has been reported"
+    ))
 
     conn.commit()
     conn.close()
@@ -1061,7 +1101,6 @@ def confirm_booking(booking_id):
 
     conn = get_db()
 
-    # 1️⃣ Booking fetch karo
     booking = conn.execute("""
         SELECT * FROM bookings
         WHERE id=? AND provider_id=?
@@ -1071,19 +1110,16 @@ def confirm_booking(booking_id):
         conn.close()
         return "Booking not found"
 
-    # 2️⃣ Customer ID nikalo (index adjust if needed)
-    customer_id = booking[2]   # usually customer_id column
+    customer_id = booking["customer_id"]
 
-    # 3️⃣ Status update karo
+    # Update booking status
     conn.execute("""
         UPDATE bookings
         SET status='confirmed'
         WHERE id=? AND provider_id=?
     """, (booking_id, session["provider_id"]))
 
-    conn.commit()
-
-    # 4️⃣ Notification insert karo
+    # Notification
     conn.execute("""
         INSERT INTO notifications (user_id, role, message)
         VALUES (?, ?, ?)
@@ -1093,47 +1129,23 @@ def confirm_booking(booking_id):
         "Your booking has been confirmed."
     ))
 
-    conn.commit()
-    conn.close()
-
-    return redirect(f"/dashboard/{session['provider_id']}")
-
-    # 1️⃣ Update status
-    conn.execute("""
-        UPDATE bookings
-        SET status='confirmed'
-        WHERE id=? AND provider_id=?
-    """, (booking_id, session["provider_id"]))
-
-    conn.commit()
-
-    # 2️⃣ Get customer_id from bookings table
-    booking = conn.execute(
-        "SELECT * FROM bookings WHERE id=?",
-        (booking_id,)
-    ).fetchone()
-
-    customer_id = booking[2]   # adjust index if needed
-
-    # 3️⃣ Fetch customer details
+    # Customer details
     customer = conn.execute(
         "SELECT * FROM customers WHERE id=?",
         (customer_id,)
     ).fetchone()
 
-    customer_email = customer[2]  # adjust index
+    if customer:
+        send_email(
+            customer["email"],
+            "Booking Confirmed",
+            "Your booking has been confirmed. Thank you!"
+        )
 
-    # 4️⃣ Send email
-    send_email(
-        customer_email,
-        "Booking Confirmed",
-        "Your booking has been confirmed. Thank you!"
-    )
-
+    conn.commit()
     conn.close()
 
     return redirect(f"/dashboard/{session['provider_id']}")
-
 
 #complete
 @app.route("/complete-booking/<int:booking_id>")
